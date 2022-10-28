@@ -1,14 +1,11 @@
 import { ThumbsUp, Trash } from 'phosphor-react';
+import { Avatar } from './Avatar';
 import styles from './Comment.module.css';
 
 export function Comment() {
     return (
         <div className={styles.comment}>
-            <img
-                className={styles.commentAvatar}
-                src={`https://mdbcdn.b-cdn.net/img/new/standard/city/${String(Math.floor(Math.random() * (120 - 1) + 1)).padStart(3, '0')}.webp`}
-                alt="Imagem do usuário que fez este comentário"
-            />
+            <Avatar hasBorder={false} alt="Imagem do usuário que fez este comentário" />
 
             <div className={styles.commentBox}>
                 <div className={styles.commentContent}>

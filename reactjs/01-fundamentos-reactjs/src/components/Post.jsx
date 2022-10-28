@@ -1,38 +1,80 @@
+import ReactMarkdown from 'react-markdown';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import remarkGfm from 'remark-gfm';
+import { humanFirendlyDate, publishedDateRelativeToNow } from '../utils/dateFormat'
+import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import styles from './Post.module.css';
 
-export function Post() {
+export function Post({ author, content, publishedAt }) {
+    const MarkdownComponents = {
+        code({ node, inline, className, children, ...props }) {
+            const match = /language-(\w+)/.exec(className || "");
+                return !inline && match ? (
+                    <SyntaxHighlighter
+                        children={String(children).replace(/\n$/, "")}
+                        style={dark} // theme
+                        language={match[1]}
+                        PreTag='section' // parent tag
+                        {...props}
+                    />
+                ) : (
+                    <code className={className} {...props}>
+                        {children}
+                    </code>
+                );
+        },
+    };
+
+    const markdown = `# Hello, world!
+        ## This is a first post.
+
+        - one
+        - two
+        - three
+
+        ~~~sh
+        ls -lh
+        ~~~
+
+    `
     return (
         <article className={styles.post}>
             <header className={styles.postHeader}>
                 <div className={styles.author}>
-                    <img
-                        className={styles.authorAvatar}
-                        src={`https://mdbcdn.b-cdn.net/img/new/standard/city/${String(Math.floor(Math.random() * (120 - 1) + 1)).padStart(3, '0')}.webp`}
+                    <Avatar
+                        src={author.avatarUrl}
+                        alt={'Imagem de perfil de ' + author.name}
                     />
 
                     <div className={styles.authorInfo}>
-                        <strong>John Doe</strong>
-                        <span>Web Developer</span>
+                        <strong>{author.name}</strong>
+                        <span>{author.role}</span>
                     </div>
                 </div>
 
                 <time 
-                    title="27 de outubro de 2022 às 13:13h"
-                    dateTime="2022-10-27 13:13"
+                    title={humanFirendlyDate(publishedAt)}
+                    dateTime={publishedAt.toISOString()}
                 >
-                    Publicado há 1h
+                    {publishedDateRelativeToNow(publishedAt)}
                 </time>
             </header>
 
             <div className={styles.content}>
-                <p>Olá humano 👋</p>
+                <ReactMarkdown
+                    children={markdown}
+                    remarkPlugins={[remarkGfm]}
+                    components={MarkdownComponents}
+                />
+                {/* <p>Olá humano 👋</p>
 
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique eveniet labore commodi architecto reprehenderit quidem et officiis in sunt inventore? Adipisci ea repudiandae obcaecati animi illo laboriosam ab deserunt nihil!</p>
 
                 <p><a href="https://rogovski.dev" target="_blank" >rogovski.dev</a></p>
 
-                <p><a href="">#vulcan</a> <a href="">#namarie</a></p>
+                <p><a href="">#vulcan</a> <a href="">#namarie</a></p> */}
             </div>
 
             <form className={styles.commentForm}>

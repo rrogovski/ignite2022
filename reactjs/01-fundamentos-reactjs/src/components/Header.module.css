@@ -1,4 +1,11 @@
 .header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 999;
+}
+
+.headerContent {
     background-color: var(--gray-800);
     height: 80px;
     display: flex;

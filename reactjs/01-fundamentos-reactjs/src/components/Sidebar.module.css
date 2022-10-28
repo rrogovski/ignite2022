@@ -1,4 +1,11 @@
 .sidebar {
+    /* background: var(--gray-800);
+    border-radius: 8px;
+    overflow: hidden; */
+}
+
+.sidebarContent {
+    position: fixed;
     background: var(--gray-800);
     border-radius: 8px;
     overflow: hidden;
@@ -29,14 +36,6 @@
     border-top: 1px solid var(--gray-600);
     margin-top: 1.5rem;
     padding: 1.5rem 2rem 2rem;
-}
-
-.avatar {
-    width: calc(3rem + 12px);
-    height: calc(3rem + 12px);
-    border-radius: 8px;
-    border: 4px solid var(--gray-800);
-    outline: 2px solid var(--green-500);
 }
 
 .profile strong {
@@ -75,4 +74,11 @@
     background: var(--green-500);
     color: var(--white);
     transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .sidebarContent {
+        /* width: calc(100% - 2rem); */
+        position: initial;
+    }
 }
