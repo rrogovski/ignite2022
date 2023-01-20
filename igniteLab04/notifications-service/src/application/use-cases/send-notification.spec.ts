@@ -1,4 +1,4 @@
-import { InMemoryNotificationRepository } from './../../../test/repositories/in-memory-notifications-repository';
+import { InMemoryNotificationRepository } from '@test/repositories/in-memory-notifications-repository';
 import { randomUUID } from 'crypto';
 import { SendNotification } from './send-notification';
 
