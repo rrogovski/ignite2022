@@ -1,18 +1,18 @@
-import { NotificationNotFound } from './errors/notification-not-found';
+import { NotificationNotFound } from '../errors/notification-not-found';
 import { InMemoryNotificationRepository } from '@test/repositories/in-memory-notifications-repository';
 import { randomUUID } from 'crypto';
-import { ReadNotification } from './read-notification';
 import { makeNotification } from '@test/factories/notification-factory';
+import { NotificationsServiceImp } from '../services/implementation/notifications-service-imp';
 
 describe('Read notification', () => {
   it('should be able to read a notification', async () => {
     const notificationRepository = new InMemoryNotificationRepository();
-    const readNotification = new ReadNotification(notificationRepository);
+    const service = new NotificationsServiceImp(notificationRepository);
 
     const notification = makeNotification();
 
     await notificationRepository.create(notification);
-    await readNotification.execute({ notificationId: notification.id });
+    await service.read({ notificationId: notification.id });
     expect(notificationRepository.notifications[0].readAt).toEqual(
       expect.any(Date),
     );
@@ -20,10 +20,10 @@ describe('Read notification', () => {
 
   it('should not be able to read a notification that does not exist', async () => {
     const notificationRepository = new InMemoryNotificationRepository();
-    const readNotification = new ReadNotification(notificationRepository);
+    const service = new NotificationsServiceImp(notificationRepository);
 
     await expect(
-      readNotification.execute({ notificationId: randomUUID() }),
+      service.read({ notificationId: randomUUID() }),
     ).rejects.toThrow(NotificationNotFound);
   });
 });
