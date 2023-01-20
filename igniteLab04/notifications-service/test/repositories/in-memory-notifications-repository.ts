@@ -1,4 +1,4 @@
-import { NotificationNotFound } from './../../src/application/use-cases/errors/notification-not-found';
+import { NotificationNotFound } from '@application/errors/notification-not-found';
 import { Notification } from '@src/application/entities/notification';
 import { NotificationsRepository } from '@src/application/repositories/notifications-repository';
 

@@ -1,9 +1,10 @@
 import { Notification } from '@application/entities/notification';
+import { BaseRepository } from './base-repository';
 
-export abstract class NotificationsRepository {
-  abstract create(notification: Notification): Promise<void>;
-  abstract findById(notificationId: string): Promise<Notification | null>;
-  abstract save(notification: Notification): Promise<void>;
-  abstract countManyByRecipientId(recipeintId: string): Promise<number>;
-  abstract findManyByRecipientId(recipeintId: string): Promise<Notification[]>;
+export abstract class NotificationsRepository extends BaseRepository<
+  Notification,
+  string
+> {
+  abstract countManyByRecipientId(recipientId: string): Promise<number>;
+  abstract findManyByRecipientId(recipientId: string): Promise<Notification[]>;
 }

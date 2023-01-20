@@ -1,6 +1,6 @@
 import { SendNotification } from '@application/use-cases/send-notification';
 import { CreateNotificationBody } from './../dtos/create-notification-body';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { NotificationViewModel } from '../view-models/notificaion-view-model';
 
 @Controller('notifications')
@@ -27,4 +27,15 @@ export class NotificationsController {
       notification: NotificationViewModel.toHTTP(notification),
     };
   }
+
+  // @Patch(':id/cancel')
+  // async cancel(@Param('id') id: string) {}
+
+  // async read() {}
+
+  // async unread() {}
+
+  // async countByRecipientId() {}
+
+  // async getByRecipientId() {}
 }
