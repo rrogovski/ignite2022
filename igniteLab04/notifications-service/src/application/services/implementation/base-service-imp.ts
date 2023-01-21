@@ -24,4 +24,16 @@ export class BaseServiceImp<
   async save(entity: T): Promise<void> {
     await this.repository.save(entity);
   }
+
+  async search(search: Partial<T>): Promise<T[]> {
+    return await this.repository.search(search);
+  }
+
+  async searchPagination(
+    search: Partial<T>,
+    page: number,
+    limit: number,
+  ): Promise<T[]> {
+    return await this.repository.searchPagination(search, page, limit);
+  }
 }

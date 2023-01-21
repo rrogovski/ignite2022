@@ -1,19 +1,15 @@
 import { PrismaNotificationMapper } from './../mappers/prisma-notification-mapper';
 import { Injectable } from '@nestjs/common';
-import { Notification } from '@application/entities/notification';
+import {
+  Notification,
+  NotificationProps,
+} from '@application/entities/notification';
 import { NotificationsRepository } from '@src/application/repositories/notifications-repository';
 import { PrismaService } from '@infra/database/prisma/prisma.service';
 
 @Injectable()
 export class PrismaNotificationsRepository implements NotificationsRepository {
   constructor(private readonly prismaService: PrismaService) {}
-  async create(notification: Notification): Promise<void> {
-    const raw = PrismaNotificationMapper.toPrisma(notification);
-    await this.prismaService.notification.create({
-      data: raw,
-    });
-  }
-
   async findById(notificationId: string): Promise<Notification | null> {
     const notification = await this.prismaService.notification.findUnique({
       where: { id: notificationId },
@@ -49,5 +45,38 @@ export class PrismaNotificationsRepository implements NotificationsRepository {
     });
 
     return notifications.map(PrismaNotificationMapper.toDomain);
+  }
+
+  async search(search: Partial<NotificationProps>): Promise<Notification[]> {
+    const where = {};
+
+    if (search.recipientId) {
+      where['recipientId'] = search.recipientId;
+    }
+
+    console.log('where', where);
+    console.log('search', search);
+
+    const notifications = await this.prismaService.notification.findMany({
+      where,
+    });
+
+    console.log('notifications', notifications);
+
+    return notifications.map(PrismaNotificationMapper.toDomain);
+  }
+
+  searchPagination(
+    search: Partial<Notification>,
+    page: number,
+    limit: number,
+  ): Promise<Notification[]> {
+    throw new Error('Method not implemented.');
+  }
+  async create(notification: Notification): Promise<void> {
+    const raw = PrismaNotificationMapper.toPrisma(notification);
+    await this.prismaService.notification.create({
+      data: raw,
+    });
   }
 }

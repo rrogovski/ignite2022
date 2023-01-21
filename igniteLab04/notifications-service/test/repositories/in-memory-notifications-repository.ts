@@ -43,4 +43,16 @@ export class InMemoryNotificationRepository implements NotificationsRepository {
       (notification) => notification.recipientId === recipientId,
     );
   }
+
+  search(search: Partial<Notification>): Promise<Notification[]> {
+    throw new Error('Method not implemented.');
+  }
+
+  searchPagination(
+    search: Partial<Notification>,
+    page: number,
+    limit: number,
+  ): Promise<Notification[]> {
+    throw new Error('Method not implemented.');
+  }
 }
