@@ -4,12 +4,25 @@ import { NotificationViewModel } from '../view-models/notificaion-view-model';
 import { NotificationsService } from '@src/application/services/notifications-service';
 import { Notification } from '@src/application/entities/notification';
 
+export interface SearchNotificationsRequest {
+  search: Partial<Notification>;
+  take: number;
+}
+
 @Controller('notifications')
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
   @Post('/search')
-  async search(@Body() search: Partial<Notification>) {
-    return await this.notificationsService.search(search);
+  async search(@Body() searchRequest: SearchNotificationsRequest) {
+    const notifications = await this.notificationsService.search(
+      searchRequest.search,
+      searchRequest.take,
+    );
+
+    return {
+      count: notifications.length,
+      notifications: notifications.map(NotificationViewModel.toHTTP),
+    };
   }
 
   @Post()

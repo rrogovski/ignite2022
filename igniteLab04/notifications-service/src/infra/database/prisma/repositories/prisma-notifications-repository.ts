@@ -47,7 +47,10 @@ export class PrismaNotificationsRepository implements NotificationsRepository {
     return notifications.map(PrismaNotificationMapper.toDomain);
   }
 
-  async search(search: Partial<NotificationProps>): Promise<Notification[]> {
+  async search(
+    search: Partial<NotificationProps>,
+    take: number,
+  ): Promise<Notification[]> {
     const where = {};
 
     if (search.recipientId) {
@@ -56,9 +59,12 @@ export class PrismaNotificationsRepository implements NotificationsRepository {
 
     console.log('where', where);
     console.log('search', search);
+    console.log('take', take);
 
     const notifications = await this.prismaService.notification.findMany({
+      take,
       where,
+      orderBy: [{ category: 'asc' }, { createdAt: 'desc' }],
     });
 
     console.log('notifications', notifications);
