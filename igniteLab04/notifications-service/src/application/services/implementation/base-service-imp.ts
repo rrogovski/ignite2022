@@ -1,6 +1,8 @@
+import { Injectable } from '@nestjs/common';
 import { BaseRepository } from '@src/application/repositories/base-repository';
 import { BaseService } from '../base-service';
 
+@Injectable()
 export class BaseServiceImp<
   T,
   ID,

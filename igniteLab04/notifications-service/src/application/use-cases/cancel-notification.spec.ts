@@ -12,7 +12,7 @@ describe('Cancel notification', () => {
     const notification = makeNotification();
 
     await notificationRepository.create(notification);
-    await service.cancel({ notificationId: notification.id });
+    await service.cancel(notification.id);
     expect(notificationRepository.notifications[0].canceledAt).toEqual(
       expect.any(Date),
     );
@@ -22,8 +22,8 @@ describe('Cancel notification', () => {
     const notificationRepository = new InMemoryNotificationRepository();
     const service = new NotificationsServiceImp(notificationRepository);
 
-    await expect(
-      service.cancel({ notificationId: randomUUID() }),
-    ).rejects.toThrow(NotificationNotFound);
+    await expect(service.cancel(randomUUID())).rejects.toThrow(
+      NotificationNotFound,
+    );
   });
 });

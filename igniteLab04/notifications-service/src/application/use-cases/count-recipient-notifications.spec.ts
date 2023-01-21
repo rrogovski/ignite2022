@@ -28,9 +28,7 @@ describe('Count recipient notifications', () => {
       }),
     );
 
-    const { count } = await service.count({
-      recipientId,
-    });
+    const { count } = await service.countManyByRecipientId(recipientId);
 
     expect(count).toEqual(2);
   });

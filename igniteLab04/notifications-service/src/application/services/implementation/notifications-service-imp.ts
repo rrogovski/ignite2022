@@ -2,21 +2,16 @@ import { BaseServiceImp } from './base-service-imp';
 import { Notification } from '@src/application/entities/notification';
 import { NotificationsRepository } from '@src/application/repositories/notifications-repository';
 import {
-  CancelNotificationRequest,
-  CancelNotificationResponse,
-  CountRecipientNotificationsRequest,
   CountRecipientNotificationsResponse,
   NotificationsService,
-  ReadNotificationRequest,
-  ReadNotificationResponse,
   SendNotificationRequest,
   SendNotificationResponse,
-  UnreadNotificationRequest,
-  UnreadNotificationResponse,
 } from '../notifications-service';
 import { NotificationNotFound } from '@src/application/errors/notification-not-found';
 import { Content } from '@src/application/entities/content';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class NotificationsServiceImp
   extends BaseServiceImp<Notification, string, NotificationsRepository>
   implements NotificationsService
@@ -25,19 +20,18 @@ export class NotificationsServiceImp
     super(repository);
   }
 
-  async countManyByRecipientId(recipientId: string): Promise<number> {
-    return await this.repository.countManyByRecipientId(recipientId);
+  async countManyByRecipientId(
+    recipientId: string,
+  ): Promise<CountRecipientNotificationsResponse> {
+    const count = await this.repository.countManyByRecipientId(recipientId);
+    return { count };
   }
 
   async findManyByRecipientId(recipientId: string): Promise<Notification[]> {
     return await this.repository.findManyByRecipientId(recipientId);
   }
 
-  async cancel(
-    request: CancelNotificationRequest,
-  ): Promise<CancelNotificationResponse> {
-    const { notificationId } = request;
-
+  async cancel(notificationId: string): Promise<void> {
     const notification = await this.repository.findById(notificationId);
 
     if (!notification) {
@@ -48,21 +42,7 @@ export class NotificationsServiceImp
     await this.repository.save(notification);
   }
 
-  async count(
-    request: CountRecipientNotificationsRequest,
-  ): Promise<CountRecipientNotificationsResponse> {
-    const { recipientId } = request;
-
-    const count = await this.repository.countManyByRecipientId(recipientId);
-
-    return { count };
-  }
-
-  async read(
-    request: ReadNotificationRequest,
-  ): Promise<ReadNotificationResponse> {
-    const { notificationId } = request;
-
+  async read(notificationId: string): Promise<void> {
     const notification = await this.repository.findById(notificationId);
 
     if (!notification) {
@@ -88,11 +68,7 @@ export class NotificationsServiceImp
     return { notification };
   }
 
-  async unread(
-    request: UnreadNotificationRequest,
-  ): Promise<UnreadNotificationResponse> {
-    const { notificationId } = request;
-
+  async unread(notificationId: string): Promise<void> {
     const notification = await this.repository.findById(notificationId);
 
     if (!notification) {

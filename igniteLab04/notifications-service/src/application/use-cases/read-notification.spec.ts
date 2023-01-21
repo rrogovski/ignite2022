@@ -12,7 +12,7 @@ describe('Read notification', () => {
     const notification = makeNotification();
 
     await notificationRepository.create(notification);
-    await service.read({ notificationId: notification.id });
+    await service.read(notification.id);
     expect(notificationRepository.notifications[0].readAt).toEqual(
       expect.any(Date),
     );
@@ -22,8 +22,8 @@ describe('Read notification', () => {
     const notificationRepository = new InMemoryNotificationRepository();
     const service = new NotificationsServiceImp(notificationRepository);
 
-    await expect(
-      service.read({ notificationId: randomUUID() }),
-    ).rejects.toThrow(NotificationNotFound);
+    await expect(service.read(randomUUID())).rejects.toThrow(
+      NotificationNotFound,
+    );
   });
 });

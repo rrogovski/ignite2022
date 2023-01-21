@@ -12,7 +12,7 @@ describe('Unread notification', () => {
     const notification = makeNotification({ readAt: new Date() });
 
     await notificationRepository.create(notification);
-    await service.unread({ notificationId: notification.id });
+    await service.unread(notification.id);
     expect(notificationRepository.notifications[0].readAt).toBeNull();
   });
 
@@ -20,8 +20,8 @@ describe('Unread notification', () => {
     const notificationRepository = new InMemoryNotificationRepository();
     const service = new NotificationsServiceImp(notificationRepository);
 
-    await expect(
-      service.unread({ notificationId: randomUUID() }),
-    ).rejects.toThrow(NotificationNotFound);
+    await expect(service.unread(randomUUID())).rejects.toThrow(
+      NotificationNotFound,
+    );
   });
 });
