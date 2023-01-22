@@ -57,9 +57,9 @@ export class PrismaNotificationsRepository implements NotificationsRepository {
       where['recipientId'] = search.recipientId;
     }
 
-    console.log('where', where);
-    console.log('search', search);
-    console.log('take', take);
+    // console.log('where', where);
+    // console.log('search', search);
+    // console.log('take', take);
 
     const notifications = await this.prismaService.notification.findMany({
       take,
@@ -67,7 +67,7 @@ export class PrismaNotificationsRepository implements NotificationsRepository {
       orderBy: [{ category: 'asc' }, { createdAt: 'desc' }],
     });
 
-    console.log('notifications', notifications);
+    // console.log('notifications', notifications);
 
     return notifications.map(PrismaNotificationMapper.toDomain);
   }
